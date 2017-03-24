@@ -38,7 +38,7 @@ int prompt_number(char *prompt, int min, int max, int fallback) {
 
     /* Check the number is valid */
     if (input < min || input > max) {
-        printf("...%d assumed...\n", default);
+        printf("...%d assumed...\n", fallback);
         input = fallback;
     }
 
@@ -51,14 +51,10 @@ int prompt_number(char *prompt, int min, int max, int fallback) {
  * @return validated input
  */
 bool prompt_bool(char *prompt) {
-    /* Temporary variable to store user input */
-    char *input;
-
-    /* Actual boolean result */
-    bool result = true;
-
-    /* Constant used to determine affirmative response */
-    char YES[4] = "YES";
+    char input[100];       // used temporarily store strings inputted by the user
+    bool result = true;    // actual boolean result
+    const char *YES = "Y"; // constant used to determine affirmative response
+    const char *NO = "N";  // constant used to determine negative response
 
     /* Display prompt and retrieve input */
     printf(prompt);
@@ -69,9 +65,12 @@ bool prompt_bool(char *prompt) {
         input[i] = toupper(input[i]);
     }
 
-    /* Determine whether the user entered yes or no
-       Allows user to enter full 'yes' value, or just first character */
-    if (! strcmp(input, YES) && ! strcmp(input, YES[0])) {
+    /* Determine whether the user entered yes or no */
+    if (0 == strcmp(input, YES)) {
+        result = true;
+    } else if (0 == strcmp(input, NO)) {
+        result = false;
+    } else {
         printf("...N assumed...\n");
         result = false;
     }
@@ -91,7 +90,6 @@ int main(int argc, char *argv[]) {
     const int PERIODS = 7;       // number of periods in the periodic table
     const int ELEMENTS = 118;    // number of elements in the periodic table
 
-    char input[100];             // used temporarily store strings inputted by the user
     int first_element = 1;       // element to begin printing at
     int last_element = ELEMENTS; // element to conclude printing at
     bool extra_groups = true;    // whether to print the extra Lanthanum and Actinium groups
