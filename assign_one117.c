@@ -98,7 +98,8 @@ int main(int argc, char *argv[]) {
     int element_group;           // the group number of the element currently bring printed
 
     int current_period = 0;      // the period currently bring printed
-    int last_group = 0;          // the previous group that was printed
+	int current_group = 0;       // the group currently bring printed
+	int last_group = 0;          // the previous group that was printed
     int padding = 0;             // the amount of padding to add between the last element and the current one
 
     /* Print the heading */
@@ -123,20 +124,20 @@ int main(int argc, char *argv[]) {
 
         if (padding > 1) {
             for (int j = 0; j < padding; j++) {
-                printf("    ");
+				printf("%3s %3s ", "", "");
             }
         }
 
         /* Only print the element if it is part of the main table */
         if (element_group > 0) {
 
-            /* Print the element number */
-            printf("%03d ", i + 1);
+            /* Print the element */
+			printf("%03d %-3s ", i + 1, element_symbol);
 
 
             /* Print a blank space to represent the Lanthanum and Actinium if appropriate */
             if (i == 55 || i == 87) {
-                printf("    ");
+				printf("%3s %3s ", "", "");
             }
 
             /* If the end of a period is reached, begin the next one */
@@ -150,10 +151,13 @@ int main(int argc, char *argv[]) {
         }
     }
 
+
+
     /* Print Lanthanum and Actinium groups */
     if (extra_groups) {
         printf("\n\n");
         current_period = 0;
+		current_group = 0;
 
         /* Loop through the elements */
         for (int i = first_element - 1; i < last_element; i++) {
@@ -164,12 +168,14 @@ int main(int argc, char *argv[]) {
 
             /* Only print elements from the Lanthanum and Actinium groups */
             if (element_group < 0) {
-                printf("%03d ", i + 1);
+				printf("%03d %-3s ", i + 1, element_symbol);
 
-                /* If the end of a period is reached, begin the next one */
-                if (element_group == -18) {
+				current_group++;
+
+				/* If the end of a period is reached, begin the next one */
+                if (current_group == 15) {
                     printf("\n");
-                    current_period = 0;
+					current_group = 0;
                 }
             }
         }
