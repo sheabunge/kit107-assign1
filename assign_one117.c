@@ -102,7 +102,7 @@ int main(int argc, char *argv[]) {
     int padding = 0;             // the amount of padding to add between the last element and the current one
 
     /* Print the heading */
-    printf("Periodic table Printer\n\n");
+    printf("Periodic Table Printer\n\n");
 
     /* Ask the user whether to print the extra groups; store the result */
     extra_groups = prompt_bool("Do you want to print the Lanthanum and Actinium groups? [Y/N] ");
@@ -123,7 +123,7 @@ int main(int argc, char *argv[]) {
 
         if (padding > 1) {
             for (int j = 0; j < padding; j++) {
-                printf("    ", j);
+                printf("    ");
             }
         }
 
