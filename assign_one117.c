@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <ctype.h>
 
 /* Table containing all elements in atomic order, with their row numbers */
 char *TABLE[118][2] = {
@@ -20,6 +21,65 @@ char *TABLE[118][2] = {
 };
 
 /**
+ * Prompt the user to enter a number
+ * @param prompt text to display as prompt
+ * @param min minimum valid value
+ * @param max maximum valid value
+ * @param fallback value to use if entered value is invalid
+ * @return validated input
+ */
+int prompt_number(char *prompt, int min, int max, int fallback) {
+    /* Temporary variable to store user input */
+    int input;
+
+    /* Display prompt and retrieve input */
+    printf(prompt);
+    scanf("%d", &input);
+
+    /* Check the number is valid */
+    if (input < min || input > max) {
+        printf("...%d assumed...\n", default);
+        input = fallback;
+    }
+
+    return input;
+}
+
+/**
+ * Prompt the user to answer a binary question
+ * @param prompt text to display as a prompt
+ * @return validated input
+ */
+bool prompt_bool(char *prompt) {
+    /* Temporary variable to store user input */
+    char *input;
+
+    /* Actual boolean result */
+    bool result = true;
+
+    /* Constant used to determine affirmative response */
+    char YES[4] = "YES";
+
+    /* Display prompt and retrieve input */
+    printf(prompt);
+    scanf("%s", input);
+
+    /* Convert input to uppercase */
+    for (int i = 0; input[i]; i++) {
+        input[i] = toupper(input[i]);
+    }
+
+    /* Determine whether the user entered yes or no
+       Allows user to enter full 'yes' value, or just first character */
+    if (! strcmp(input, YES) && ! strcmp(input, YES[0])) {
+        printf("...N assumed...\n");
+        result = false;
+    }
+
+    return result;
+}
+
+/**
  * Main method
  * @param argc
  * @param argv
@@ -34,8 +94,6 @@ int main(int argc, char *argv[]) {
     /* Number of elements in the periodic table */
     const int ELEMENTS = 118;
 
-    /* Constant used to determine affirmative response */
-    char YES[4] = "yes";
     /* Used temporarily store strings inputted by the user */
     char input[100];
     /* Element to begin printing at */
@@ -61,34 +119,11 @@ int main(int argc, char *argv[]) {
     printf("Periodic table Printer\n\n");
 
     /* Ask the user whether to print the extra groups; store the result */
-    printf("Do you want to print the Lanthanum and Actinium groups? [Y/N] ");
-    scanf("%s", input);
+    extra_groups = prompt_bool("Do you want to print the Lanthanum and Actinium groups? [Y/N] ");
 
-    /* Determine whether the user entered yes or no */
-    if (! strcmp(input, YES)) {
-        printf("...N assumed...\n");
-        extra_groups = false;
-    }
-
-    /* Ask the user for the number of the first element to print */
-    printf("Enter number of first element to print: ");
-    scanf("%d", &first_element);
-
-    /* Check the number is valid */
-    if (first_element < 1 || first_element > ELEMENTS) {
-        printf("...1 assumed...\n");
-        first_element = 1;
-    }
-
-    /* Ask the user for the number of the second element to print */
-    printf("Enter number of last element to print: ");
-    scanf("%d", &last_element);
-
-    /* Check the number is valid */
-    if (last_element < 1 || last_element > ELEMENTS) {
-        printf("...118 assumed...\n");
-        last_element = ELEMENTS;
-    }
+    /* Prompt the user to enter the first and last elements to print */
+    first_element = prompt_number("Enter number of first element to print: ", 1, ELEMENTS, 1);
+    last_element = prompt_number("Enter number of last element to print: ", 1, ELEMENTS, ELEMENTS);
 
     /* Loop through all the elements */
     for (int i = first_element - 1; i < last_element; i++) {
