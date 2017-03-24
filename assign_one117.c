@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
 	int last_group = 0;
 	int padding = 0;
 
-	printf("PERIDOC TABLE PRINTER\n\n");
+	printf("Periodic table Printer\n\n");
 
 /*	printf("Do you want to print the Lanthanum and Actinium groups? [Y/N] ");
 	scanf("%s", input);
