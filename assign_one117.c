@@ -86,7 +86,7 @@ bool prompt_bool(char *prompt) {
  */
 int main(int argc, char *argv[]) {
 
-    const int ROWS = 18;         // number of rows in the periodic table
+    const int GROUPS = 18;       // number of groups in the periodic table
     const int PERIODS = 7;       // number of periods in the periodic table
     const int ELEMENTS = 118;    // number of elements in the periodic table
 
@@ -94,6 +94,7 @@ int main(int argc, char *argv[]) {
     int last_element = ELEMENTS; // element to conclude printing at
     bool extra_groups = true;    // whether to print the extra Lanthanum and Actinium groups
 
+	int element;                 // the atomic number of the element currently being printed
     char *element_symbol;        // the symbol of the element currently being printed
     int element_group;           // the group number of the element currently bring printed
 
@@ -113,45 +114,41 @@ int main(int argc, char *argv[]) {
     last_element = prompt_number("Enter number of last element to print: ", 1, ELEMENTS, ELEMENTS);
 
     /* Loop through all the elements */
-    for (int i = first_element - 1; i < last_element; i++) {
+	element = first_element;
 
-        /* Fetch the element symbol and group number from the table, converting the group to an integer */
-        element_symbol = TABLE[i][0];
-        element_group = atoi(TABLE[i][1]);
+	for (int period = 1; period <= PERIODS && element <= last_element; period++) {
+		for (int group = 1; group <= GROUPS && element <= last_element; group++) {
 
-        /* Calculate and print the amount of required padding */
-        padding = (element_group - last_group - 1);
+			/* Fetch the element symbol and group number from the table, converting the group to an integer */
+			element_symbol = TABLE[element - 1][0];
+			element_group = atoi(TABLE[element - 1][1]);
 
-        if (padding > 1) {
-            for (int j = 0; j < padding; j++) {
+			/* If this cell holds an element ... */
+			if (group == element_group) {
+
+				/* Only print the element if it is part of the main table */
+				if (element_group > 0) {
+					/* Print the element */
+					printf("%03d %-3s ", element, element_symbol);
+				}
+
+				/* Move onto the next element, skipping over the Lanthanum and Actinium elements */
+				if (element == 56) {
+					element = 72;
+				} else if (element == 88) {
+					element = 104;
+				} else {
+					element++;
+				}
+
+			} else {
+				/* Print an empty cell in the absence of an element */
 				printf("%3s %3s ", "", "");
-            }
-        }
+			}
+		}
 
-        /* Only print the element if it is part of the main table */
-        if (element_group > 0) {
-
-            /* Print the element */
-			printf("%03d %-3s ", i + 1, element_symbol);
-
-
-            /* Print a blank space to represent the Lanthanum and Actinium if appropriate */
-            if (i == 55 || i == 87) {
-				printf("%3s %3s ", "", "");
-            }
-
-            /* If the end of a period is reached, begin the next one */
-            if (element_group == 18) {
-                printf("\n");
-                current_period = 0;
-            }
-
-            /* Save the current group for comparison during next iteration */
-            last_group = element_group;
-        }
-    }
-
-
+		printf("\n");
+	}
 
     /* Print Lanthanum and Actinium groups */
     if (extra_groups) {
