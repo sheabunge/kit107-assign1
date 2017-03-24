@@ -62,7 +62,7 @@ bool prompt_bool(char *prompt) {
 
     /* Convert input to uppercase */
     for (int i = 0; input[i]; i++) {
-        input[i] = toupper(input[i]);
+        input[i] = (char) toupper(input[i]);
     }
 
     /* Determine whether the user entered yes or no */
