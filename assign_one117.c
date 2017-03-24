@@ -87,33 +87,21 @@ bool prompt_bool(char *prompt) {
  */
 int main(int argc, char *argv[]) {
 
-    /* Number of rows in the periodic table */
-    const int ROWS = 18;
-    /* Number of periods in the periodic table */
-    const int PERIODS = 7;
-    /* Number of elements in the periodic table */
-    const int ELEMENTS = 118;
+    const int ROWS = 18;         // number of rows in the periodic table
+    const int PERIODS = 7;       // number of periods in the periodic table
+    const int ELEMENTS = 118;    // number of elements in the periodic table
 
-    /* Used temporarily store strings inputted by the user */
-    char input[100];
-    /* Element to begin printing at */
-    int first_element = 1;
-    /* Element to conclude printing at */
-    int last_element = ELEMENTS;
-    /* Whether to print the extra Lanthanum and Actinium groups */
-    bool extra_groups = true;
+    char input[100];             // used temporarily store strings inputted by the user
+    int first_element = 1;       // element to begin printing at
+    int last_element = ELEMENTS; // element to conclude printing at
+    bool extra_groups = true;    // whether to print the extra Lanthanum and Actinium groups
 
-    /* The symbol of the element currently being printed */
-    char *element_symbol;
-    /* The group number of the element currently bring printed */
-    int element_group;
+    char *element_symbol;        // the symbol of the element currently being printed
+    int element_group;           // the group number of the element currently bring printed
 
-    /* The period currently bring printed */
-    int current_period = 0;
-    /* The previous group that was printed */
-    int last_group = 0;
-    /* The amount of padding to add between the last element and the current one */
-    int padding = 0;
+    int current_period = 0;      // the period currently bring printed
+    int last_group = 0;          // the previous group that was printed
+    int padding = 0;             // the amount of padding to add between the last element and the current one
 
     /* Print the heading */
     printf("Periodic table Printer\n\n");
