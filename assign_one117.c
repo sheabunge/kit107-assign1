@@ -98,10 +98,8 @@ int main(int argc, char *argv[]) {
     char *element_symbol;        // the symbol of the element currently being printed
     int element_group;           // the group number of the element currently bring printed
 
-    int current_period = 0;      // the period currently bring printed
-	int current_group = 0;       // the group currently bring printed
-	int last_group = 0;          // the previous group that was printed
-    int padding = 0;             // the amount of padding to add between the last element and the current one
+	int period = 1;             // the period currently bring printed
+	int group = 1;              // the group currently bring printed
 
     /* Print the heading */
     printf("Periodic Table Printer\n\n");
@@ -116,8 +114,8 @@ int main(int argc, char *argv[]) {
     /* Loop through all the elements */
 	element = first_element;
 
-	for (int period = 1; period <= PERIODS && element <= last_element; period++) {
-		for (int group = 1; group <= GROUPS && element <= last_element; group++) {
+	for (period = 1; period <= PERIODS && element <= last_element; period++) {
+		for (group = 1; group <= GROUPS && element <= last_element; group++) {
 
 			/* Fetch the element symbol and group number from the table, converting the group to an integer */
 			element_symbol = TABLE[element - 1][0];
@@ -153,28 +151,43 @@ int main(int argc, char *argv[]) {
     /* Print Lanthanum and Actinium groups */
     if (extra_groups) {
         printf("\n\n");
-        current_period = 0;
-		current_group = 0;
 
-        /* Loop through the elements */
-        for (int i = first_element - 1; i < last_element; i++) {
+		/* Print Lanthanum row */
+		for (element = 57; element <= 71 && element <= last_element; element++) {
 
-            /* Fetch the element symbol and group number from the table, converting the group to an integer */
-            element_symbol = TABLE[i][0];
-            element_group = atoi(TABLE[i][1]);
+			/* Print the element if it is to be included */
+			if (element >= first_element && element <= last_element) {
+				/* Fetch the element symbol and group number from the table, converting the group to an integer */
+				element_symbol = TABLE[element - 1][0];
+				element_group = atoi(TABLE[element - 1][1]);
 
-            /* Only print elements from the Lanthanum and Actinium groups */
-            if (element_group < 0) {
-				printf("%03d %-3s ", i + 1, element_symbol);
+				/* Print the element */
+				printf("%03d %-3s ", element, element_symbol);
+			} else {
+				/* Print an empty cell in the absence of an element */
+				printf("%3s %3s ", "", "");
 
-				current_group++;
+			}
+		}
 
-				/* If the end of a period is reached, begin the next one */
-                if (current_group == 15) {
-                    printf("\n");
-					current_group = 0;
-                }
-            }
-        }
+		printf("\n");
+
+		/* Print Actinium row */
+		for (element = 89; element <= 103 && element <= last_element; element++) {
+
+			/* Print the element if it is to be included */
+			if (element >= first_element && element <= last_element) {
+				/* Fetch the element symbol and group number from the table, converting the group to an integer */
+				element_symbol = TABLE[element - 1][0];
+				element_group = atoi(TABLE[element - 1][1]);
+
+				/* Print the element */
+				printf("%03d %-3s ", element, element_symbol);
+			} else {
+				/* Print an empty cell in the absence of an element */
+				printf("%3s %3s ", "", "");
+
+			}
+		}
     }
 }
