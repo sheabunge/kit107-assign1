@@ -20,20 +20,21 @@ char *TABLE[118][2] = {
     { "Rg", "11" }, { "Cn", "12" }, { "Uut", "13" }, { "Fl", "14" }, { "Uup", "15" }, { "Lv", "16" }, { "Uus", "17" }, { "Uuo", "18" }
 };
 
+const int GROUPS = 18;    // number of groups in the periodic table
+const int PERIODS = 7;    // number of periods in the periodic table
+const int ELEMENTS = 118; // number of elements in the periodic table
+
 /**
- * Prompt the user to enter a number
- * @param prompt text to display as prompt
+ * Retrieve a number from the user input
  * @param min minimum valid value
  * @param max maximum valid value
  * @param fallback value to use if entered value is invalid
  * @return validated input
  */
-int prompt_number(char *prompt, int min, int max, int fallback) {
-    /* Temporary variable to store user input */
-    int input;
+int input_number(int min, int max, int fallback) {
+    int input; // temporary variable used to store user input
 
-    /* Display prompt and retrieve input */
-    printf(prompt);
+    /* Retrieve input */
     scanf("%d", &input);
 
     /* Check the number is valid */
@@ -46,18 +47,16 @@ int prompt_number(char *prompt, int min, int max, int fallback) {
 }
 
 /**
- * Prompt the user to answer a binary question
- * @param prompt text to display as a prompt
+ * Retrieve the answer to a binary question from the user
+ * @param yes string denoting affirmative response
+ * @param no string denoting negative response
+ * @param fallback Value to use in place of an invalid input value
  * @return validated input
  */
-bool prompt_bool(char *prompt) {
-    char input[100];       // used temporarily store strings inputted by the user
-    bool result = true;    // actual boolean result
-    const char *YES = "Y"; // constant used to determine affirmative response
-    const char *NO = "N";  // constant used to determine negative response
+bool input_bool(char *yes, char *no, bool fallback) {
+    char input[100]; // used temporarily to store strings entered by the user
 
-    /* Display prompt and retrieve input */
-    printf(prompt);
+    /* Retrieve input */
     scanf("%s", input);
 
     /* Convert input to uppercase */
@@ -66,16 +65,15 @@ bool prompt_bool(char *prompt) {
     }
 
     /* Determine whether the user entered yes or no */
-    if (0 == strcmp(input, YES)) {
-        result = true;
-    } else if (0 == strcmp(input, NO)) {
-        result = false;
+    if (0 == strcmp(input, yes)) {
+        return true;
+    } else if (0 == strcmp(input, no)) {
+        return false;
     } else {
-        printf("...N assumed...\n");
-        result = false;
+        /* If the input was invalid, revert to the fallback */
+        printf("...%s assumed...\n", fallback ? yes : no);
+        return fallback;
     }
-
-    return result;
 }
 
 /**
@@ -85,11 +83,6 @@ bool prompt_bool(char *prompt) {
  * @return
  */
 int main(int argc, char *argv[]) {
-
-    const int GROUPS = 18;       // number of groups in the periodic table
-    const int PERIODS = 7;       // number of periods in the periodic table
-    const int ELEMENTS = 118;    // number of elements in the periodic table
-
     int first_element = 1;       // element to begin printing at
     int last_element = ELEMENTS; // element to conclude printing at
     bool extra_groups = true;    // whether to print the extra Lanthanum and Actinium groups
@@ -105,11 +98,15 @@ int main(int argc, char *argv[]) {
     printf("Periodic Table Printer\n\n");
 
     /* Ask the user whether to print the extra groups; store the result */
-    extra_groups = prompt_bool("Do you want to print the Lanthanum and Actinium groups? [Y/N] ");
+    printf("Do you want to print the Lanthanum and Actinium groups? [Y/N] ");
+    extra_groups = input_bool("Y", "N", false);
 
     /* Prompt the user to enter the first and last elements to print */
-    first_element = prompt_number("Enter number of first element to print: ", 1, ELEMENTS, 1);
-    last_element = prompt_number("Enter number of last element to print: ", 1, ELEMENTS, ELEMENTS);
+    printf("Enter number of first element to print: ");
+    first_element = input_number(1, ELEMENTS, 1);
+
+    printf("Enter number of last element to print: ");
+    last_element = input_number(1, ELEMENTS, ELEMENTS);
 
     /* Loop through all the elements */
 	element = first_element;
