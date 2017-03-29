@@ -109,7 +109,7 @@ int main(int argc, char *argv[]) {
     first_element = input_number(1, ELEMENTS, 1);
 
     printf("Enter number of last element to print: ");
-    last_element = input_number(1, ELEMENTS, ELEMENTS);
+    last_element = input_number(first_element, ELEMENTS, ELEMENTS);
 
     /* Loop through all the elements */
 	element = first_element;
