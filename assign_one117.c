@@ -151,11 +151,11 @@ void print_table(int first_element, int last_element, bool extra_groups)
 	int padding = 0;      // the amount of padding to print before the current element
 
 	/* Loop through every element in the defined range */
-	for (int i = first_element - 1; i < last_element; i++)
+	for (int element = first_element; element <= last_element; element++)
 	{
 		/* Retrieve the element symbol and group from the table */
-		element_symbol = TABLE[i][0];
-		element_group = atoi(TABLE[i][1]);
+		element_symbol = TABLE[element - 1][0];
+		element_group = atoi(TABLE[element - 1][1]);
 
 		/* Calculate the amount of required padding between this group and the previous group */
 		padding = (element_group - last_group - 1);
@@ -173,14 +173,14 @@ void print_table(int first_element, int last_element, bool extra_groups)
 		if (element_group > 0)
 		{
 			/* Print the element atomic number and symbol */
-			printf("%03d %-3s\t", i + 1, element_symbol);
+			printf("%03d %-3s\t", element, element_symbol);
 
-			if (i == 55)
+			if (element == 56)
 			{
 				/* Print the placeholder for the Lanthanum group in the appropriate position */
 				printf("*\t\t");
 			}
-			else if (i == 87)
+			else if (element == 88)
 			{
 				/* Print the placeholder for the Actinium group in the appropriate position */
 				printf("**\t\t");
