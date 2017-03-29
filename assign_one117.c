@@ -103,7 +103,7 @@ void retrieve_input(int *first_element, int *last_element, bool *extra_groups)
 }
 
 /**
- * Prints the Lanthinum/Actinium groups of the table.
+ * Prints the Lanthanum and Actinium groups of the table.
  * @param first_element the first element to print.
  * @param last_element the last element to print.
  */
