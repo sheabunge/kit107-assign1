@@ -16,8 +16,8 @@
 
 #define ELEMENTS 118 // number of elements in the periodic table
 
-const int FIRST_ELEM = 1;       // number of the first element in the table
 const int LAST_ELEM = ELEMENTS; // number of the last element in the table
+const int FIRST_ELEM = 1;       // number of the first element in the table
 
 /* Table containing all elements in atomic order, with their row numbers */
 char *TABLE[ELEMENTS][2] = {
@@ -103,7 +103,7 @@ void retrieve_input(int *first_element, int *last_element, bool *extra_groups)
 }
 
 /**
- * Prints the Lanthanum and Actinium groups of the table.
+ * Prints the Lanthinum/Actinium groups of the table.
  * @param first_element the first element to print.
  * @param last_element the last element to print.
  */
@@ -113,8 +113,7 @@ void print_extra_groups(int first_element, int last_element)
 	int element_group;    // the group number of the element currently bring printed
 
 	/* Print extra padding to align with main table */
-	printf("%13s", "");
-	printf(" *  ");
+	printf("\t\t*\t\t");
 
 	/* Begin by looping through all elements again */
 	for (int i = first_element - 1; i < last_element; i++)
@@ -132,7 +131,7 @@ void print_extra_groups(int first_element, int last_element)
 			//* Once the Lanthanum group is printed, begin a new line for the Actinium group */
 			if (element_group == -25)
 			{
-				printf("\n %13s * * ", "");
+				printf("\n\t\t**\t\t");
 			}
 		}
 	}
@@ -166,7 +165,7 @@ void print_table(int first_element, int last_element, bool extra_groups)
 			for (int j = 0; j < padding; j++)
 			{
 				/* Print an empty cell of padding */
-				printf("%3s %3s ", "", "");
+				printf("\t\t");
 			}
 		}
 
@@ -174,17 +173,17 @@ void print_table(int first_element, int last_element, bool extra_groups)
 		if (element_group > 0)
 		{
 			/* Print the element atomic number and symbol */
-			printf("%03d %-3s ", i + 1, element_symbol);
+			printf("%03d %-3s\t", i + 1, element_symbol);
 
 			if (i == 55)
 			{
 				/* Print the placeholder for the Lanthanum group in the appropriate position */
-				printf("%2s*%5s", "", "");
+				printf("*\t\t");
 			}
 			else if (i == 87)
 			{
 				/* Print the placeholder for the Actinium group in the appropriate position */
-				printf("%1s* *%3s ", "", "");
+				printf("**\t\t");
 			}
 
 			/* Move to a new line when the end of a period is reached */
@@ -199,7 +198,7 @@ void print_table(int first_element, int last_element, bool extra_groups)
 	}
 
 	/* Print the Lanthanum and Actinium groups if necessary */
-	if (extra_groups && (first_element >= 57 && first_element <= 71 || first_element >= 89 && first_element <= 103))
+	if (extra_groups)
 	{
 		printf("\n\n");
 		print_extra_groups(first_element, last_element);
