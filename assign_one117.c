@@ -1,14 +1,26 @@
+/*
+ * assign_one117.c
+ *
+ * Written by Nathan Haig (390023) and Shea Bunge (407095)
+ * Ratio of work completed by each author is 50:50
+ *
+ * Completed on 2017-03-29
+ *
+ * Prints an excerpt of the periodic table of elements.
+ * Prompts the user to enter the range of elements to print, and whether to include the Lanthanum and Actinium groups.
+ */
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <stdbool.h>
+#include <ctype.h>
 
-const int GROUPS = 18;    // number of groups in the periodic table
-const int PERIODS = 7;    // number of periods in the periodic table
-const int ELEMENTS = 118; // number of elements in the periodic table
+#define ELEMENTS 118 // number of elements in the periodic table
+
+const int FIRST_ELEM = 1;       // number of the first element in the table
+const int LAST_ELEM = ELEMENTS; // number of the last element in the table
 
 /* Table containing all elements in atomic order, with their row numbers */
-char *TABLE[118][2] = {
+char *TABLE[ELEMENTS][2] = {
         { "H", "1" }, { "He", "18" }, { "Li", "1" }, { "Be", "2" }, { "B", "13" }, { "C", "14" }, { "N", "15" }, { "O", "16" }, { "F", "17" }, { "Ne", "18" },
         { "Na", "1" }, { "Mg", "2" }, { "Al", "13" }, { "Si", "14" }, { "P", "15" }, { "S", "16" }, { "Cl", "17" }, { "Ar", "18" }, { "K", "1" }, { "Ca", "2" },
         { "Sc", "3" }, { "Ti", "4" }, { "V", "5" }, { "Cr", "6" }, { "Mn", "7" }, { "Fe", "8" }, { "Co", "9" }, { "Ni", "10" }, { "Cu", "11" }, { "Zn", "12" },
@@ -23,97 +35,197 @@ char *TABLE[118][2] = {
         { "Rg", "11" }, { "Cn", "12" }, { "Uut", "13" }, { "Fl", "14" }, { "Uup", "15" }, { "Lv", "16" }, { "Uus", "17" }, { "Uuo", "18" }
 };
 
-void retrieve_input(bool *extra_groups, int *first_element, int *last_element) {
-    char YES[4] = "yes";
-    char input[100]; // Used to temporarily store strings inputted by the user
+/**
+ * Retrieve a number from the user input
+ * @param min minimum valid value
+ * @param max maximum valid value
+ * @param fallback value to use if entered value is invalid
+ * @return validated input
+ */
+int input_number(int min, int max, int fallback)
+{
+	int input; // used to store the actual input from the user
 
-    printf("Do you want to print the Lanthanum and Actinium groups? [Y/N] ");
-    scanf("%s", input);
+	scanf("%d", &input);
 
-    if (strcmp(input, YES)) {
-        printf("...N assumed...\n");
-        extra_groups = false;
-    }
+	/* Ensure that the input is within the valid range */
+	if (input < min || input > max)
+	{
+		/* If not, use the fallback value */
+		printf("...%d assumed...\n", fallback);
+		input = fallback;
+	}
 
-    printf("Enter number of first element to print: ");
-    scanf("%d", &first_element);
-
-    if (first_element < 1 || first_element > ELEMENTS) {
-        printf("...1 assumed...\n");
-        first_element = 1;
-    }
-
-    printf("Enter number of last element to print: ");
-    scanf("%d", &last_element);
-
-    if (last_element < 1 || last_element > ELEMENTS) {
-        printf("...118 assumed...\n");
-        last_element = ELEMENTS;
-    }
+	return input;
 }
 
-int main(int argc, char *argv[]) {
-    int first_element = 1;    // Starting element to be printed.
-    int last_element = ELEMENTS;    //Last element to be printed.
-    bool extra_groups = true;
-    char *element_symbol;
-    int element_group;
+/**
+ * Retrieve the user input for use in other functions.
+ * @param first_element pointer to variable used to store first element
+ * @param last_element pointer to variable used to store last element
+ * @param extra_groups pointer to variable used to determine whether to print the extra groups, if necessary
+ */
+void retrieve_input(int *first_element, int *last_element, bool *extra_groups)
+{
+	char YES = 'Y'; // constant used to represent affirmative answer
+	char NO = 'N';  // constant used to represent negative answer
+	char input[10]; // used to temporarily store strings retrieved from the user
 
-    int current_period = 0;
-    int last_group = 0;
-    int padding = 0;
+	/* Retrieve a string value from the user */
+	printf("Do you want to print the Lanthanum and Actinium groups? [Y/N] ");
+	scanf("%s", input);
 
-    printf("Periodic Table Printer\n\n");
-    retrieve_input(&extra_groups, &first_element, &last_element);
+	/* Check if the user has answered a valid value, and set the extra_groups variable */
+	if (toupper(input[0]) == YES)
+	{
+		*extra_groups = true;
+	}
+	else if (toupper(input[0]) == NO)
+	{
+		*extra_groups = false;
+	}
+	else
+	{
+		/* If the entered value is not valid, default to 'no' */
+		printf("...N assumed...\n");
+		*extra_groups = false;
+	}
 
-    for (int i = first_element - 1; i < last_element; i++) {
-        element_symbol = TABLE[i][0];
-        element_group = atoi(TABLE[i][1]);
+	/* Prompt the user for the element number to begin printing from
+	 * If a value is entered that is not an element number, default to the first element number */
+	printf("Enter number of first element to print: ");
+	*first_element = input_number(FIRST_ELEM, LAST_ELEM, FIRST_ELEM);
 
-        padding = (element_group - last_group - 1);
+	/* Prompt the user the element number to conclude printing at. If the entered number is not a valid element number
+	 * or is not greater than the start value, default to the last element number */
+	printf("Enter number of last element to print: ");
+	*last_element = input_number(*first_element, LAST_ELEM, LAST_ELEM);
+}
 
-        if (padding > 1) {
-            for (int j = 0; j < padding; j++) {
-                printf("    ", j);
-            }
-        }
+/**
+ * Prints the Lanthinum/Actinium groups of the table.
+ * @param first_element the first element to print.
+ * @param last_element the last element to print.
+ */
+void print_extra_groups(int first_element, int last_element)
+{
+	char *element_symbol; // the symbol of the element currently being printed
+	int element_group;    // the group number of the element currently bring printed
 
-        if (element_group > 0) {
+	/* Print extra padding to align with main table */
+	printf("%13s", "");
+	printf(" *  ");
 
-            printf("%03d ", i + 1);
+	/* Begin by looping through all elements again */
+	for (int i = first_element - 1; i < last_element; i++)
+	{
+		/* Retrieve the element symbol and group from the table */
+		element_symbol = TABLE[i][0];
+		element_group = atoi(TABLE[i][1]);
 
+		/* Only print the Lanthanum and Actinium elements; i.e. when the group number is negative */
+		if (element_group < 0)
+		{
+			/* Print the element atomic number and symbol */
+			printf("%03d %-3s ", i + 1, element_symbol);
 
-            if (i == 55 || i == 87) {
-                printf("    ");
-            }
+			//* Once the Lanthanum group is printed, begin a new line for the Actinium group */
+			if (element_group == -25)
+			{
+				printf("\n %13s * * ", "");
+			}
+		}
+	}
+}
 
-            if (element_group == 18) {
-                printf("\n");
-                current_period = 0;
-            }
+/**
+ * Print a formatted periodic table of elements
+ * @param first_element number of the first element to print
+ * @param last_element  number of the final element to print
+ * @param extra_groups  whether to print the Lanthanum and Actinium groups
+ */
+void print_table(int first_element, int last_element, bool extra_groups)
+{
+	char *element_symbol; // the symbol of the element currently being printed
+	int element_group;    // the group number of the element currently bring printed
+	int last_group = 0;   // the group number of the previous element
+	int padding = 0;      // the amount of padding to print before the current element
 
-            last_group = element_group;
-        }
+	/* Loop through every element in the defined range */
+	for (int i = first_element - 1; i < last_element; i++)
+	{
+		/* Retrieve the element symbol and group from the table */
+		element_symbol = TABLE[i][0];
+		element_group = atoi(TABLE[i][1]);
 
-    }
+		/* Calculate the amount of required padding between this group and the previous group */
+		padding = (element_group - last_group - 1);
 
-    /* Print Lanthanum and Actinium groups */
-    if (extra_groups) {
-        printf("\n\n");
-        current_period = 0;
+		if (padding > 1)
+		{
+			for (int j = 0; j < padding; j++)
+			{
+				/* Print an empty cell of padding */
+				printf("%3s %3s ", "", "");
+			}
+		}
 
-        for (int i = first_element - 1; i < last_element; i++) {
-            element_symbol = TABLE[i][0];
-            element_group = atoi(TABLE[i][1]);
+		/* Only print the element if it is not from the Lanthanum or Actinium groups */
+		if (element_group > 0)
+		{
+			/* Print the element atomic number and symbol */
+			printf("%03d %-3s ", i + 1, element_symbol);
 
-            if (element_group < 0) {
-                printf("%03d ", i + 1);
+			if (i == 55)
+			{
+				/* Print the placeholder for the Lanthanum group in the appropriate position */
+				printf("%2s*%5s", "", "");
+			}
+			else if (i == 87)
+			{
+				/* Print the placeholder for the Actinium group in the appropriate position */
+				printf("%1s* *%3s ", "", "");
+			}
 
-                if (element_group == -18) {
-                    printf("\n");
-                    current_period = 0;
-                }
-            }
-        }
-    }
+			/* Move to a new line when the end of a period is reached */
+			if (element_group == 18)
+			{
+				printf("\n");
+			}
+
+			last_group = element_group;
+		}
+
+	}
+
+	/* Print the Lanthanum and Actinium groups if necessary */
+	if (extra_groups && (first_element >= 57 && first_element <= 71 || first_element >= 89 && first_element <= 103))
+	{
+		printf("\n\n");
+		print_extra_groups(first_element, last_element);
+	}
+}
+
+/**
+ * Main function to run the program.
+ * @param argc number of arguments passed to the program
+ * @param argv array of arguments passed to the program
+ * @return returns 0 on successful completion
+ */
+int main(int argc, char *argv[])
+{
+	int first_element = FIRST_ELEM; // element to begin printing from
+	int last_element = LAST_ELEM;   // element to conclude printing at
+	bool extra_groups = true;       // whether to print the Lanthanum and Actinium groups
+
+	/* Print the program header */
+	printf("Periodic Table Printer\n\n");
+
+	/* Retrieve the setting values from the user */
+	retrieve_input(&first_element, &last_element, &extra_groups);
+
+	/* Print the periodic table using the entered settings */
+	print_table(first_element, last_element, extra_groups);
+
+	return 0;
 }
