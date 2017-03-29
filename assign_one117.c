@@ -186,9 +186,9 @@ void print_table(int first_element, int last_element, bool extra_groups)
 				printf("%-3s %3s ", "**", "");
 			}
 
-			/* Move to a new line when the end of a period is reached */
 			if (element_group == 18)
 			{
+				/* Move to a new line when the end of a period is reached */
 				printf("\n");
 			}
 
