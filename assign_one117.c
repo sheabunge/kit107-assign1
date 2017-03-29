@@ -55,6 +55,7 @@ int input_number(int min, int max, int fallback) {
  */
 bool input_bool(char *yes, char *no, bool fallback) {
     char input[100]; // used temporarily to store strings entered by the user
+    bool result;     // actual validated result
 
     /* Retrieve input */
     scanf("%s", input);
@@ -66,14 +67,16 @@ bool input_bool(char *yes, char *no, bool fallback) {
 
     /* Determine whether the user entered yes or no */
     if (0 == strcmp(input, yes)) {
-        return true;
+        result = true;
     } else if (0 == strcmp(input, no)) {
-        return false;
+        result = false;
     } else {
         /* If the input was invalid, revert to the fallback */
         printf("...%s assumed...\n", fallback ? yes : no);
-        return fallback;
+        result = fallback;
     }
+
+    return result;
 }
 
 /**
