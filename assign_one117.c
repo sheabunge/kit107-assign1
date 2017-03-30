@@ -112,27 +112,29 @@ void print_extra_groups(int first_element, int last_element)
 	char *element_symbol; // the symbol of the element currently being printed
 	int element_group;    // the group number of the element currently bring printed
 
-	/* Print extra padding to align with main table */
-	printf("%7s %-3s %3s ", "", "*", "");
-
 	/* Begin by looping through all elements again */
-	for (int i = first_element - 1; i < last_element; i++)
+	for (int element = first_element; element <= last_element; element++)
 	{
 		/* Retrieve the element symbol and group from the table */
-		element_symbol = TABLE[i][0];
-		element_group = atoi(TABLE[i][1]);
+		element_symbol = TABLE[element - 1][0];
+		element_group = atoi(TABLE[element - 1][1]);
 
 		/* Only print the Lanthanum and Actinium elements; i.e. when the group number is negative */
-		if (element_group < 0)
-		{
-			/* Print the element atomic number and symbol */
-			printf("%03d %-3s ", i + 1, element_symbol);
+		if (element_group < 0) {
 
-			//* Once the Lanthanum group is printed, begin a new line for the Actinium group */
-			if (element_group == -25)
+			/* For the first element, print extra padding to align with main table */
+			if (element_group == -11 || element == first_element) {
+				printf("\n\n%7s %-3s %3s ", "", "*", "");
+			}
+
+			/* For the first Actinium element, print a newline and some padding */
+			if (element_group == -31)
 			{
 				printf("\n%7s %-3s %3s ", "", "**", "");
 			}
+
+			/* Print the element atomic number and symbol */
+			printf("%03d %-3s ", element, element_symbol);
 		}
 	}
 }
@@ -199,7 +201,6 @@ void print_table(int first_element, int last_element, bool extra_groups)
 	/* Print the Lanthanum and Actinium groups if necessary */
 	if (extra_groups)
 	{
-		printf("\n\n");
 		print_extra_groups(first_element, last_element);
 	}
 }
