@@ -109,8 +109,10 @@ void retrieve_input(int *first_element, int *last_element, bool *extra_groups)
  */
 void print_extra_groups(int first_element, int last_element)
 {
-	char *element_symbol; // the symbol of the element currently being printed
-	int element_group;    // the group number of the element currently bring printed
+	char *element_symbol;           // the symbol of the element currently being printed
+	int element_group;              // the group number of the element currently bring printed
+	bool printed_lanthanum = false; // whether the start of the Lanthanum row has been printed
+	bool printed_actinium = false;  // whether the start of the Actinium row has been printed
 
 	/* Begin by looping through all elements again */
 	for (int element = first_element; element <= last_element; element++)
@@ -122,15 +124,17 @@ void print_extra_groups(int first_element, int last_element)
 		/* Only print the Lanthanum and Actinium elements; i.e. when the group number is negative */
 		if (element_group < 0) {
 
-			/* For the first element, print extra padding to align with main table */
-			if (element_group == -11 || element == first_element) {
+			/* For the Lanthanum element, print extra padding to align with main table */
+			if (!printed_lanthanum && element_group <= -11 && element_group >= -25) {
 				printf("\n\n%7s %-3s %3s ", "", "*", "");
+				printed_lanthanum = true;
 			}
 
 			/* For the first Actinium element, print a newline and some padding */
-			if (element_group == -31)
+			if (!printed_actinium && element_group <= -31 && element_group >= -45)
 			{
 				printf("\n%7s %-3s %3s ", "", "**", "");
+				printed_actinium = true;
 			}
 
 			/* Print the element atomic number and symbol */
