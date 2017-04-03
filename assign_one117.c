@@ -4,7 +4,7 @@
  * Written by Nathan Haig (390023) and Shea Bunge (407095)
  * Ratio of work completed by each author is 50:50
  *
- * Completed on 2017-03-29
+ * Completed on 2017-04-03
  *
  * Prints an excerpt of the periodic table of elements.
  * Prompts the user to enter the range of elements to print, and whether to include the Lanthanum and Actinium groups.
@@ -19,20 +19,20 @@
 const int FIRST_ELEM = 1;       // number of the first element in the table
 const int LAST_ELEM = ELEMENTS; // number of the last element in the table
 
-/* Table containing all elements in atomic order, with their row numbers */
+// Table containing all elements in atomic order, with their row numbers
 char *TABLE[ELEMENTS][2] = {
-        { "H", "1" }, { "He", "18" }, { "Li", "1" }, { "Be", "2" }, { "B", "13" }, { "C", "14" }, { "N", "15" }, { "O", "16" }, { "F", "17" }, { "Ne", "18" },
-        { "Na", "1" }, { "Mg", "2" }, { "Al", "13" }, { "Si", "14" }, { "P", "15" }, { "S", "16" }, { "Cl", "17" }, { "Ar", "18" }, { "K", "1" }, { "Ca", "2" },
-        { "Sc", "3" }, { "Ti", "4" }, { "V", "5" }, { "Cr", "6" }, { "Mn", "7" }, { "Fe", "8" }, { "Co", "9" }, { "Ni", "10" }, { "Cu", "11" }, { "Zn", "12" },
-        { "Ga", "13" }, { "Ge", "14" }, { "As", "15" }, { "Se", "16" }, { "Br", "17" }, { "Kr", "18" }, { "Rb", "1" }, { "Sr", "2" }, { "Y", "3" }, { "Zr", "4" },
-        { "Nb", "5" }, { "Mo", "6" }, { "Tc", "7" }, { "Ru", "8" }, { "Rh", "9" }, { "Pd", "10" }, { "Ag", "11" }, { "Cd", "12" }, { "In", "13" }, { "Sn", "14" },
-        { "Sb", "15" }, { "Te", "16" }, { "I", "17" }, { "Xe", "18" }, { "Cs", "1" }, { "Ba", "2" }, { "La", "-11" }, { "Ce", "-12" }, { "Pr", "-13" }, { "Nd", "-14" },
-        { "Pm", "-15" }, { "Sm", "-16" }, { "Eu", "-17" }, { "Gd", "-18" }, { "Tb", "-19" }, { "Dy", "-20" }, { "Ho", "-21" }, { "Er", "-22" }, { "Tm", "-23" }, { "Yb", "-24" },
-        { "Lu", "-25" }, { "Hf", "4" }, { "Ta", "5" }, { "W", "6" }, { "Re", "7" }, { "Os", "8" }, { "Ir", "9" }, { "Pt", "10" }, { "Au", "11" }, { "Hg", "12" },
-        { "Tl", "13" }, { "Pb", "14" }, { "Bi", "15" }, { "Po", "16" }, { "At", "17" }, { "Rn", "18" }, { "Fr", "1" }, { "Ra", "2" }, { "Ac", "-31" }, { "Th", "-32" },
-        { "Pa", "-33" }, { "U", "-34" }, { "Np", "-35" }, { "Pu", "-36" }, { "Am", "-37" }, { "Cm", "-38" }, { "Bk", "-39" }, { "Cf", "-40" }, { "Es", "-41" }, { "Fm", "-42" },
-        { "Md", "-43" }, { "No", "-44" }, { "Lr", "-45" }, { "Rf", "4" }, { "Db", "5" }, { "Sg", "6" }, { "Bh", "7" }, { "Hs", "8" }, { "Mt", "9" }, { "Ds", "10" },
-        { "Rg", "11" }, { "Cn", "12" }, { "Uut", "13" }, { "Fl", "14" }, { "Uup", "15" }, { "Lv", "16" }, { "Uus", "17" }, { "Uuo", "18" }
+		{ "H", "1" },{ "He", "18" },{ "Li", "1" },{ "Be", "2" },{ "B", "13" },{ "C", "14" },{ "N", "15" },{ "O", "16" },{ "F", "17" },{ "Ne", "18" },
+		{ "Na", "1" },{ "Mg", "2" },{ "Al", "13" },{ "Si", "14" },{ "P", "15" },{ "S", "16" },{ "Cl", "17" },{ "Ar", "18" },{ "K", "1" },{ "Ca", "2" },
+		{ "Sc", "3" },{ "Ti", "4" },{ "V", "5" },{ "Cr", "6" },{ "Mn", "7" },{ "Fe", "8" },{ "Co", "9" },{ "Ni", "10" },{ "Cu", "11" },{ "Zn", "12" },
+		{ "Ga", "13" },{ "Ge", "14" },{ "As", "15" },{ "Se", "16" },{ "Br", "17" },{ "Kr", "18" },{ "Rb", "1" },{ "Sr", "2" },{ "Y", "3" },{ "Zr", "4" },
+		{ "Nb", "5" },{ "Mo", "6" },{ "Tc", "7" },{ "Ru", "8" },{ "Rh", "9" },{ "Pd", "10" },{ "Ag", "11" },{ "Cd", "12" },{ "In", "13" },{ "Sn", "14" },
+		{ "Sb", "15" },{ "Te", "16" },{ "I", "17" },{ "Xe", "18" },{ "Cs", "1" },{ "Ba", "2" },{ "La", "-11" },{ "Ce", "-12" },{ "Pr", "-13" },{ "Nd", "-14" },
+		{ "Pm", "-15" },{ "Sm", "-16" },{ "Eu", "-17" },{ "Gd", "-18" },{ "Tb", "-19" },{ "Dy", "-20" },{ "Ho", "-21" },{ "Er", "-22" },{ "Tm", "-23" },{ "Yb", "-24" },
+		{ "Lu", "-25" },{ "Hf", "4" },{ "Ta", "5" },{ "W", "6" },{ "Re", "7" },{ "Os", "8" },{ "Ir", "9" },{ "Pt", "10" },{ "Au", "11" },{ "Hg", "12" },
+		{ "Tl", "13" },{ "Pb", "14" },{ "Bi", "15" },{ "Po", "16" },{ "At", "17" },{ "Rn", "18" },{ "Fr", "1" },{ "Ra", "2" },{ "Ac", "-31" },{ "Th", "-32" },
+		{ "Pa", "-33" },{ "U", "-34" },{ "Np", "-35" },{ "Pu", "-36" },{ "Am", "-37" },{ "Cm", "-38" },{ "Bk", "-39" },{ "Cf", "-40" },{ "Es", "-41" },{ "Fm", "-42" },
+		{ "Md", "-43" },{ "No", "-44" },{ "Lr", "-45" },{ "Rf", "4" },{ "Db", "5" },{ "Sg", "6" },{ "Bh", "7" },{ "Hs", "8" },{ "Mt", "9" },{ "Ds", "10" },
+		{ "Rg", "11" },{ "Cn", "12" },{ "Uut", "13" },{ "Fl", "14" },{ "Uup", "15" },{ "Lv", "16" },{ "Uus", "17" },{ "Uuo", "18" }
 };
 
 /**
@@ -48,10 +48,10 @@ int input_number(int min, int max, int fallback)
 
 	scanf("%d", &input);
 
-	/* Ensure that the input is within the valid range */
+	// Ensure that the input is within the valid range
 	if (input < min || input > max)
 	{
-		/* If not, use the fallback value */
+		// If not, use the fallback value
 		printf("...%d assumed...\n", fallback);
 		input = fallback;
 	}
@@ -71,11 +71,11 @@ void retrieve_input(int *first_element, int *last_element, bool *extra_groups)
 	char NO  = 'N'; // constant used to represent negative answer
 	char input[10]; // used to temporarily store strings retrieved from the user
 
-	/* Retrieve a string value from the user */
+	// Retrieve a string value from the user
 	printf("Do you want to print the Lanthanum and Actinium groups? [Y/N] ");
 	scanf("%s", input);
 
-	/* Check if the user has answered a valid value, and set the extra_groups variable */
+	// Check if the user has answered a valid value, and set the extra_groups variable
 	if (toupper(input[0]) == YES)
 	{
 		*extra_groups = true;
@@ -86,7 +86,7 @@ void retrieve_input(int *first_element, int *last_element, bool *extra_groups)
 	}
 	else
 	{
-		/* If the entered value is not valid, default to 'no' */
+		// If the entered value is not valid, default to 'no'
 		printf("...N assumed...\n");
 		*extra_groups = false;
 	}
@@ -114,30 +114,30 @@ void print_extra_groups(int first_element, int last_element)
 	bool printed_lanthanum = false; // whether the start of the Lanthanum row has been printed
 	bool printed_actinium = false;  // whether the start of the Actinium row has been printed
 
-	/* Begin by looping through all elements again */
+	// Begin by looping through all elements again
 	for (int element = first_element; element <= last_element; element++)
 	{
-		/* Retrieve the element symbol and group from the table */
+		// Retrieve the element symbol and group from the table
 		element_symbol = TABLE[element - 1][0];
 		element_group = atoi(TABLE[element - 1][1]);
 
-		/* Only print the Lanthanum and Actinium elements; i.e. when the group number is negative */
-		if (element_group < 0) {
-
-			/* For the Lanthanum element, print extra padding to align with main table */
-			if (!printed_lanthanum && element_group <= -11 && element_group >= -25) {
+		// Only print the Lanthanum and Actinium elements; i.e. when the group number is negative
+		if (element_group < 0)
+		{
+			// For the first Lanthanum element, print extra padding to align with main table
+			if (!printed_lanthanum && element_group <= -11 && element_group >= -25)
+			{
 				printf("\n\n%7s %-3s %3s ", "", "*", "");
 				printed_lanthanum = true;
 			}
 
-			/* For the first Actinium element, print a newline and some padding */
-			if (!printed_actinium && element_group <= -31 && element_group >= -45)
-			{
+			// For the first Actinium element, print a newline and some padding
+			if (!printed_actinium && element_group <= -31 && element_group >= -45) {
 				printf("\n%7s %-3s %3s ", "", "**", "");
 				printed_actinium = true;
 			}
 
-			/* Print the element atomic number and symbol */
+			// Print the element atomic number and symbol
 			printf("%03d %-3s ", element, element_symbol);
 		}
 	}
@@ -156,45 +156,45 @@ void print_table(int first_element, int last_element, bool extra_groups)
 	int last_group = 0;   // the group number of the previous element
 	int padding;          // the amount of padding to print before the current element
 
-	/* Loop through every element in the defined range */
+	// Loop through every element in the defined range
 	for (int element = first_element; element <= last_element; element++)
 	{
-		/* Retrieve the element symbol and group from the table */
+		// Retrieve the element symbol and group from the table
 		element_symbol = TABLE[element - 1][0];
 		element_group = atoi(TABLE[element - 1][1]);
 
-		/* Calculate the amount of required padding between this group and the previous group */
+		// Calculate the amount of required padding between this group and the previous group
 		padding = (element_group - last_group - 1);
 
 		if (padding > 1)
 		{
 			for (int j = 0; j < padding; j++)
 			{
-				/* Print an empty cell of padding */
+				// Print an empty cell of padding
 				printf("%3s %3s ", "", "");
 			}
 		}
 
-		/* Only print the element if it is not from the Lanthanum or Actinium groups */
+		// Only print the element if it is not from the Lanthanum or Actinium groups
 		if (element_group > 0)
 		{
-			/* Print the element atomic number and symbol */
+			// Print the element atomic number and symbol
 			printf("%03d %-3s ", element, element_symbol);
 
 			if (element == 56)
 			{
-				/* Print the placeholder for the Lanthanum group in the appropriate position */
+				// Print the placeholder for the Lanthanum group in the appropriate position
 				printf("%-3s %3s ", "*", "");
 			}
 			else if (element == 88)
 			{
-				/* Print the placeholder for the Actinium group in the appropriate position */
+				// Print the placeholder for the Actinium group in the appropriate position
 				printf("%-3s %3s ", "**", "");
 			}
 
 			if (element_group == 18)
 			{
-				/* Move to a new line when the end of a period is reached */
+				// Move to a new line when the end of a period is reached
 				printf("\n");
 			}
 
@@ -202,7 +202,7 @@ void print_table(int first_element, int last_element, bool extra_groups)
 		}
 	}
 
-	/* Print the Lanthanum and Actinium groups if necessary */
+	// Print the Lanthanum and Actinium groups if necessary
 	if (extra_groups)
 	{
 		print_extra_groups(first_element, last_element);
@@ -221,14 +221,16 @@ int main(int argc, char *argv[])
 	int last_element = LAST_ELEM;   // element to conclude printing at
 	bool extra_groups = true;       // whether to print the Lanthanum and Actinium groups
 
-	/* Print the program header */
+	// Print the program header
 	printf("Periodic Table Printer\n\n");
 
-	/* Retrieve the setting values from the user */
+	// Retrieve the setting values from the user
 	retrieve_input(&first_element, &last_element, &extra_groups);
 
-	/* Print the periodic table using the entered settings */
+	// Print the periodic table using the entered settings
 	print_table(first_element, last_element, extra_groups);
+
+	printf("\n\n");
 
 	return 0;
 }
