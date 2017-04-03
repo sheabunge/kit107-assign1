@@ -16,8 +16,8 @@
 
 #define ELEMENTS 118 // number of elements in the periodic table
 
-const int LAST_ELEM = ELEMENTS; // number of the last element in the table
 const int FIRST_ELEM = 1;       // number of the first element in the table
+const int LAST_ELEM = ELEMENTS; // number of the last element in the table
 
 /* Table containing all elements in atomic order, with their row numbers */
 char *TABLE[ELEMENTS][2] = {
@@ -68,7 +68,7 @@ int input_number(int min, int max, int fallback)
 void retrieve_input(int *first_element, int *last_element, bool *extra_groups)
 {
 	char YES = 'Y'; // constant used to represent affirmative answer
-	char NO = 'N';  // constant used to represent negative answer
+	char NO  = 'N'; // constant used to represent negative answer
 	char input[10]; // used to temporarily store strings retrieved from the user
 
 	/* Retrieve a string value from the user */
@@ -154,7 +154,7 @@ void print_table(int first_element, int last_element, bool extra_groups)
 	char *element_symbol; // the symbol of the element currently being printed
 	int element_group;    // the group number of the element currently bring printed
 	int last_group = 0;   // the group number of the previous element
-	int padding = 0;      // the amount of padding to print before the current element
+	int padding;          // the amount of padding to print before the current element
 
 	/* Loop through every element in the defined range */
 	for (int element = first_element; element <= last_element; element++)
